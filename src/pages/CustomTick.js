@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
+// import axios from 'axios';
+// import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
 /*import { PieChart, Pie, Cell } from 'recharts';*/
 import moment from 'moment';
 

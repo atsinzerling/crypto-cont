@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
+// import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
 /*import { PieChart, Pie, Cell } from 'recharts';*/
 import { Box, Button, Typography } from '@mui/material';
 import moment from 'moment';
@@ -8,7 +8,7 @@ import './Dashboard.css';
 import CryptoPieChart from './CryptoPieChart';
 import CryptoCoinChart from './CryptoCoinChart';
 import CryptoChart from './CryptoChart';
-import CustomTick from './CustomTick';
+// import CustomTick from './CustomTick';
 
 const holdings = [
     {
