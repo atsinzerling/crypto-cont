@@ -12,43 +12,43 @@ import CryptoChart from './CryptoChart';
 
 const holdings = [
     {
-        date: '2022-12-01',
+        date: '2023-12-01',
         bitcoin: 9,
         ethereum: 30,
         ripple: 0
     },
     {
-        date: '2023-01-01',
+        date: '2024-01-01',
         bitcoin: 10,
         ethereum: 30,
         ripple: 0
     },
     {
-        date: '2023-02-01',
+        date: '2024-02-01',
         bitcoin: 20,
         ethereum: 310,
         ripple: 10000,
     },
     {
-        date: '2023-03-01',
+        date: '2024-03-01',
         bitcoin: 15,
         ethereum: 340,
         ripple: 210000,
     },
     {
-        date: '2023-04-01',
+        date: '2024-04-01',
         bitcoin: 15,
         ethereum: 340,
         ripple: 300000,
     },
     {
-        date: '2023-05-01',
+        date: '2024-05-01',
         bitcoin: 15,
         ethereum: 330,
         ripple: 290000,
     },
     {
-        date: '2023-06-01',
+        date: '2024-06-01',
         bitcoin: 10,
         ethereum: 310,
         ripple: 300000,
@@ -84,7 +84,8 @@ class MainPane extends React.Component {
         this.handleActiveTooltip = this.handleActiveTooltip.bind(this);
         this.CustomTooltip = this.CustomTooltip.bind(this);
         this.coins = [...new Set(this.state.holdingsData.flatMap(holding => Object.keys(holding).filter(key => key !== 'date')))];
-        this.startDate = this.state.holdingsData.reduce((minDate, holding) => holding.date < minDate ? holding.date : minDate, this.state.holdingsData[0].date);
+        const startDatt = this.state.holdingsData.reduce((minDate, holding) => holding.date < minDate ? holding.date : minDate, this.state.holdingsData[0].date);
+        this.startDate = (moment().diff(moment(startDatt), 'days') > 365 ? moment().subtract(365, 'days').format('YYYY-MM-DD') : startDatt)
     }
 
     componentDidMount() {
@@ -121,10 +122,11 @@ class MainPane extends React.Component {
         console.log(this.coins);
         for (const coin of this.coins) {
             // Fetch price data for the coin
+            let daysToFetch = moment().diff(moment(this.startDate), 'days')
             const response = await axios.get(`https://api.coingecko.com/api/v3/coins/${coin.toLowerCase()}/market_chart`, {
                 params: {
                     vs_currency: 'usd',
-                    days: moment().diff(moment(this.startDate), 'days') + 1
+                    days: (daysToFetch)
                 }
             });
             console.log(response.data);
@@ -156,12 +158,15 @@ class MainPane extends React.Component {
 
                     // Find the corresponding holding for the current date
                     const newHolding = holdingsData.find(holding => holding.date === date);
-
+                    console.log(date, holdingsData[0].date)
+                    console.log("newHolding", newHolding);
                     // Update currentHoldings if newHolding exists
-                    if (newHolding) {
+                    if (!newHolding && moment(date).isAfter(moment(holdingsData[holdingsData.length - 1].date))) {
+                        currentHoldings = { ...currentHoldings, ...holdingsData[holdingsData.length - 1] };
+                    } else if (newHolding) {
                         currentHoldings = { ...currentHoldings, ...newHolding };
                     }
-
+                    console.log("currentHoldings", currentHoldings, currentHoldings[coin]);
                     const quantity = currentHoldings[coin] || 0;
                     console.log("date", date);
                     // Find the corresponding data item for the current date
